@@ -94,6 +94,17 @@
   white-space: nowrap;
 }
 
+.editInput {
+  flex: 1;
+  padding: var(--token-space-xs) var(--token-space-sm);
+  border: 1px solid var(--token-color-primary);
+  border-radius: var(--token-radius-sm);
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--token-color-bg);
+  font-size: var(--token-font-size-md);
+  outline: none;
+}
+
 .deleteButton {
   background: none;
   border: none;

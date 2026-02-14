@@ -48,6 +48,17 @@ export const todoApi = createApi({
       invalidatesTags: [{ type: 'TodoList', id: 'LIST' }],
     }),
 
+    updateTodoList: builder.mutation<TodoList, { id: number; name: string }>({
+      query: ({ id, name }) => ({
+        url: `/todolists/${id}.json`,
+        method: 'PATCH',
+        body: { todo_list: { name } },
+      }),
+      transformResponse: (response: unknown) => camelizeKeys<TodoList>(response),
+      invalidatesTags: (result) =>
+        result ? [{ type: 'TodoList', id: result.id }, { type: 'TodoList', id: 'LIST' }] : [],
+    }),
+
     deleteTodoList: builder.mutation<void, number>({
       query: (id) => ({
         url: `/todolists/${id}.json`,
@@ -105,6 +116,7 @@ export const {
   useGetTodoListsQuery,
   useGetTodoItemsQuery,
   useCreateTodoListMutation,
+  useUpdateTodoListMutation,
   useDeleteTodoListMutation,
   useCreateTodoItemMutation,
   useUpdateTodoItemMutation,

@@ -104,6 +104,9 @@ export function TodoListDetail({ listId }: TodoListDetailProps) {
               updateItem({ listId, itemId: item.id, updates: { completed: !item.completed } })
             }
             onDelete={() => deleteItem({ listId, itemId: item.id })}
+            onEdit={(description) =>
+              updateItem({ listId, itemId: item.id, updates: { description } })
+            }
           />
         ))}
         {!isLoading && items.length === 0 && (

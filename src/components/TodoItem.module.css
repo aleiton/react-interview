@@ -36,6 +36,16 @@
   font-size: var(--token-font-size-md);
 }
 
+.editInput {
+  flex: 1;
+  padding: var(--token-space-xs) var(--token-space-sm);
+  border: 1px solid var(--token-color-primary);
+  border-radius: var(--token-radius-sm);
+  font-size: var(--token-font-size-md);
+  color: var(--token-color-text);
+  outline: none;
+}
+
 .deleteButton {
   background: none;
   border: none;
