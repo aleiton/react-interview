@@ -1,0 +1,44 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: var(--token-space-xl);
+}
+
+.content {
+  text-align: center;
+  padding: var(--token-space-xl);
+  background: var(--token-color-error-bg);
+  border: 1px solid var(--token-color-coral);
+  border-radius: var(--token-radius-md);
+  max-width: 400px;
+}
+
+.title {
+  color: var(--token-color-coral);
+  font-size: var(--token-font-size-lg);
+  margin: 0 0 var(--token-space-sm);
+}
+
+.message {
+  color: var(--token-color-text-muted);
+  font-size: var(--token-font-size-sm);
+  margin: 0 0 var(--token-space-lg);
+}
+
+.retryButton {
+  padding: var(--token-space-sm) var(--token-space-lg);
+  background: var(--token-color-coral);
+  color: var(--token-color-bg);
+  border: none;
+  border-radius: var(--token-radius-sm);
+  cursor: pointer;
+  font-size: var(--token-font-size-sm);
+  font-weight: 600;
+  transition: opacity var(--token-transition-fast);
+}
+
+.retryButton:hover {
+  opacity: 0.85;
+}

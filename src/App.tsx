@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { TodoListSidebar } from './components/TodoListSidebar';
 import { TodoListDetail } from './components/TodoListDetail';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import './styles/design-tokens.css';
 import styles from './App.module.css';
 
@@ -9,8 +10,12 @@ function App() {
 
   return (
     <div className={styles.layout}>
-      <TodoListSidebar selectedId={selectedId} onSelect={setSelectedId} />
-      <TodoListDetail listId={selectedId} />
+      <ErrorBoundary>
+        <TodoListSidebar selectedId={selectedId} onSelect={setSelectedId} />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <TodoListDetail listId={selectedId} />
+      </ErrorBoundary>
     </div>
   );
 }
