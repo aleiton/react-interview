@@ -13,6 +13,7 @@ export function TodoItem({ item, onToggle, onDelete, onEdit }: TodoItemProps) {
   const [editing, setEditing] = useState(false);
   const [editValue, setEditValue] = useState('');
   const editInputRef = useRef<HTMLInputElement>(null);
+  const savingRef = useRef(false);
 
   useEffect(() => {
     if (editing) {
@@ -23,21 +24,26 @@ export function TodoItem({ item, onToggle, onDelete, onEdit }: TodoItemProps) {
 
   const startEditing = () => {
     if (item.completed) return;
+    savingRef.current = false;
     setEditing(true);
     setEditValue(item.description);
   };
 
   const cancelEditing = () => {
+    savingRef.current = true;
     setEditing(false);
     setEditValue('');
   };
 
   const saveEditing = () => {
+    if (savingRef.current) return;
+    savingRef.current = true;
     const trimmed = editValue.trim();
     if (trimmed && trimmed !== item.description) {
       onEdit(trimmed);
     }
-    cancelEditing();
+    setEditing(false);
+    setEditValue('');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -63,6 +69,7 @@ export function TodoItem({ item, onToggle, onDelete, onEdit }: TodoItemProps) {
             onChange={(e) => setEditValue(e.target.value)}
             onKeyDown={handleKeyDown}
             onBlur={saveEditing}
+            aria-label="Edit item description"
           />
         ) : (
           <span
@@ -73,7 +80,7 @@ export function TodoItem({ item, onToggle, onDelete, onEdit }: TodoItemProps) {
           </span>
         )}
       </div>
-      <button className={styles.deleteButton} onClick={onDelete}>
+      <button className={styles.deleteButton} onClick={onDelete} aria-label="Delete item">
         &times;
       </button>
     </div>

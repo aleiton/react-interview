@@ -29,6 +29,10 @@ export function TodoListDetail({ listId }: TodoListDetailProps) {
   const [newDescription, setNewDescription] = useState('');
 
   useEffect(() => {
+    setNewDescription('');
+  }, [listId]);
+
+  useEffect(() => {
     if (status.state !== 'done') return;
     const timer = setTimeout(resetStatus, 3000);
     return () => clearTimeout(timer);
@@ -45,8 +49,8 @@ export function TodoListDetail({ listId }: TodoListDetailProps) {
   const handleAddItem = async () => {
     const trimmed = newDescription.trim();
     if (!trimmed) return;
-    await createItem({ listId, description: trimmed });
-    setNewDescription('');
+    const result = await createItem({ listId, description: trimmed });
+    if (!('error' in result)) setNewDescription('');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {

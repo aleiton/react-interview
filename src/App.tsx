@@ -26,7 +26,12 @@ function App() {
       </button>
 
       {sidebarOpen && (
-        <div className={styles.overlay} onClick={() => setSidebarOpen(false)} />
+        <div
+          className={styles.overlay}
+          onClick={() => setSidebarOpen(false)}
+          onKeyDown={(e) => e.key === 'Escape' && setSidebarOpen(false)}
+          role="presentation"
+        />
       )}
 
       <ErrorBoundary>

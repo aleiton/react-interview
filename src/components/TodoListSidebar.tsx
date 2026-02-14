@@ -24,6 +24,7 @@ export function TodoListSidebar({ selectedId, onSelect }: TodoListSidebarProps) 
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editValue, setEditValue] = useState('');
   const editInputRef = useRef<HTMLInputElement>(null);
+  const savingRef = useRef(false);
 
   useEffect(() => {
     if (editingId !== null) {
@@ -35,8 +36,8 @@ export function TodoListSidebar({ selectedId, onSelect }: TodoListSidebarProps) 
   const handleCreate = async () => {
     const trimmed = newName.trim();
     if (!trimmed) return;
-    await createList(trimmed);
-    setNewName('');
+    const result = await createList(trimmed);
+    if (!('error' in result)) setNewName('');
   };
 
   const handleDelete = async (id: number) => {
@@ -49,23 +50,31 @@ export function TodoListSidebar({ selectedId, onSelect }: TodoListSidebarProps) 
   };
 
   const startEditing = (id: number, name: string) => {
+    savingRef.current = false;
     setEditingId(id);
     setEditValue(name);
   };
 
-  const cancelEditing = () => {
+  const stopEditing = () => {
     setEditingId(null);
     setEditValue('');
   };
 
+  const cancelEditing = () => {
+    savingRef.current = true;
+    stopEditing();
+  };
+
   const saveEditing = async () => {
+    if (savingRef.current) return;
+    savingRef.current = true;
     const trimmed = editValue.trim();
     if (!trimmed || editingId === null) {
-      cancelEditing();
+      stopEditing();
       return;
     }
     await updateList({ id: editingId, name: trimmed });
-    cancelEditing();
+    stopEditing();
   };
 
   const handleEditKeyDown = (e: React.KeyboardEvent) => {
@@ -110,6 +119,7 @@ export function TodoListSidebar({ selectedId, onSelect }: TodoListSidebarProps) 
                 onKeyDown={handleEditKeyDown}
                 onBlur={saveEditing}
                 onClick={(e) => e.stopPropagation()}
+                aria-label="Edit list name"
               />
             ) : (
               <span
@@ -128,6 +138,7 @@ export function TodoListSidebar({ selectedId, onSelect }: TodoListSidebarProps) 
                 e.stopPropagation();
                 handleDelete(list.id);
               }}
+              aria-label="Delete list"
             >
               &times;
             </button>
