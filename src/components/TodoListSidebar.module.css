@@ -92,6 +92,13 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  cursor: text;
+  border-bottom: 1px dashed transparent;
+  transition: border-color var(--token-transition-fast);
+}
+
+.name:hover {
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .editInput {

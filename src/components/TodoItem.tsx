@@ -47,7 +47,7 @@ export function TodoItem({ item, onToggle, onDelete, onEdit }: TodoItemProps) {
 
   return (
     <div className={styles.container}>
-      <label className={styles.label}>
+      <div className={styles.label}>
         <input
           type="checkbox"
           checked={item.completed}
@@ -72,7 +72,7 @@ export function TodoItem({ item, onToggle, onDelete, onEdit }: TodoItemProps) {
             {item.description}
           </span>
         )}
-      </label>
+      </div>
       <button className={styles.deleteButton} onClick={onDelete}>
         &times;
       </button>
