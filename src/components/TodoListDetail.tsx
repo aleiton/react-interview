@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   useGetTodoItemsQuery,
   useCreateTodoItemMutation,
@@ -25,6 +25,12 @@ export function TodoListDetail({ listId }: TodoListDetailProps) {
   const [completeAll] = useCompleteAllItemsMutation();
   const { status, resetStatus } = useTodoListChannel(listId);
   const [newDescription, setNewDescription] = useState('');
+
+  useEffect(() => {
+    if (status.state !== 'done') return;
+    const timer = setTimeout(resetStatus, 3000);
+    return () => clearTimeout(timer);
+  }, [status.state, resetStatus]);
 
   if (listId === null) {
     return (
