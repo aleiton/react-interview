@@ -1,15 +1,13 @@
-import { useState, useEffect } from 'react';
 import {
   useGetTodoItemsQuery,
-  useCreateTodoItemMutation,
   useUpdateTodoItemMutation,
   useDeleteTodoItemMutation,
   useCompleteAllItemsMutation,
 } from '../api/todoApi';
 import { useTodoListChannel } from '../cable/useTodoListChannel';
 import { TodoItem } from './TodoItem';
-import { ProgressBar } from './ProgressBar';
-import { ErrorBanner } from './ErrorBanner';
+import { AddItemForm } from './AddItemForm';
+import { BulkCompleteStatus } from './BulkCompleteStatus';
 import { Skeleton } from './Skeleton';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import styles from './TodoListDetail.module.css';
@@ -21,22 +19,10 @@ interface TodoListDetailProps {
 export function TodoListDetail({ listId }: TodoListDetailProps) {
   const { data: items = [], isLoading } = useGetTodoItemsQuery(listId ?? 0, { skip: listId === null });
   const showSkeleton = useDelayedLoading(isLoading);
-  const [createItem] = useCreateTodoItemMutation();
   const [updateItem] = useUpdateTodoItemMutation();
   const [deleteItem] = useDeleteTodoItemMutation();
   const [completeAll] = useCompleteAllItemsMutation();
   const { status, resetStatus } = useTodoListChannel(listId);
-  const [newDescription, setNewDescription] = useState('');
-
-  useEffect(() => {
-    setNewDescription('');
-  }, [listId]);
-
-  useEffect(() => {
-    if (status.state !== 'done') return;
-    const timer = setTimeout(resetStatus, 3000);
-    return () => clearTimeout(timer);
-  }, [status.state, resetStatus]);
 
   if (listId === null) {
     return (
@@ -45,17 +31,6 @@ export function TodoListDetail({ listId }: TodoListDetailProps) {
       </main>
     );
   }
-
-  const handleAddItem = async () => {
-    const trimmed = newDescription.trim();
-    if (!trimmed) return;
-    const result = await createItem({ listId, description: trimmed });
-    if (!('error' in result)) setNewDescription('');
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') handleAddItem();
-  };
 
   const handleCompleteAll = async () => {
     resetStatus();
@@ -75,36 +50,9 @@ export function TodoListDetail({ listId }: TodoListDetailProps) {
         )}
       </div>
 
-      {status.state === 'running' && (
-        <ProgressBar completed={status.completed} total={status.total} />
-      )}
+      <BulkCompleteStatus status={status} onReset={resetStatus} onRetry={handleCompleteAll} />
 
-      {status.state === 'done' && (
-        <div className={styles.successBanner}>
-          Completed {status.completed} items
-        </div>
-      )}
-
-      {status.state === 'error' && (
-        <ErrorBanner
-          message="Bulk completion failed. Some items may have been completed."
-          onRetry={handleCompleteAll}
-        />
-      )}
-
-      <div className={styles.addForm}>
-        <input
-          className={styles.input}
-          type="text"
-          placeholder="Add a new item..."
-          value={newDescription}
-          onChange={(e) => setNewDescription(e.target.value)}
-          onKeyDown={handleKeyDown}
-        />
-        <button className={styles.addButton} onClick={handleAddItem}>
-          Add
-        </button>
-      </div>
+      <AddItemForm listId={listId} />
 
       {showSkeleton && <Skeleton lines={5} />}
 
