@@ -108,6 +108,9 @@ export const todoApi = createApi({
         url: `/todolists/${listId}/complete_all.json`,
         method: 'POST',
       }),
+      invalidatesTags: (_result, _error, listId) => [
+        { type: 'TodoItem', id: `LIST-${listId}` },
+      ],
     }),
   }),
 });

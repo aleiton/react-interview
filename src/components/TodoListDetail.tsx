@@ -19,7 +19,7 @@ interface TodoListDetailProps {
 }
 
 export function TodoListDetail({ listId }: TodoListDetailProps) {
-  const { data: items = [], isLoading } = useGetTodoItemsQuery(listId!, { skip: listId === null });
+  const { data: items = [], isLoading } = useGetTodoItemsQuery(listId ?? 0, { skip: listId === null });
   const showSkeleton = useDelayedLoading(isLoading);
   const [createItem] = useCreateTodoItemMutation();
   const [updateItem] = useUpdateTodoItemMutation();

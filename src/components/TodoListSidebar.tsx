@@ -41,6 +41,7 @@ export function TodoListSidebar({ selectedId, onSelect }: TodoListSidebarProps) 
   };
 
   const handleDelete = async (id: number) => {
+    if (!window.confirm('Delete this list and all its items?')) return;
     await deleteList(id);
     if (selectedId === id) onSelect(null);
   };
