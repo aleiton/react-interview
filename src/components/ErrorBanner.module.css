@@ -1,0 +1,31 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--token-space-md);
+  background: var(--token-color-error-bg);
+  border: 1px solid var(--token-color-coral);
+  border-radius: var(--token-radius-md);
+  margin: var(--token-space-sm) 0;
+}
+
+.message {
+  color: var(--token-color-coral);
+  font-size: var(--token-font-size-sm);
+  font-weight: 500;
+}
+
+.retryButton {
+  padding: var(--token-space-xs) var(--token-space-md);
+  background: var(--token-color-coral);
+  color: var(--token-color-bg);
+  border: none;
+  border-radius: var(--token-radius-sm);
+  cursor: pointer;
+  font-size: var(--token-font-size-sm);
+  transition: opacity var(--token-transition-fast);
+}
+
+.retryButton:hover {
+  opacity: 0.85;
+}

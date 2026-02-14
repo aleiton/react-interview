@@ -1,0 +1,52 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--token-space-sm) var(--token-space-md);
+  border-bottom: 1px solid var(--token-color-border);
+  transition: background var(--token-transition-fast);
+}
+
+.container:hover {
+  background: var(--token-color-bg-alt);
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: var(--token-space-sm);
+  cursor: pointer;
+  flex: 1;
+}
+
+.checkbox {
+  accent-color: var(--token-color-primary);
+  width: 16px;
+  height: 16px;
+}
+
+.description {
+  color: var(--token-color-text);
+  font-size: var(--token-font-size-md);
+}
+
+.completed {
+  color: var(--token-color-text-muted);
+  text-decoration: line-through;
+  font-size: var(--token-font-size-md);
+}
+
+.deleteButton {
+  background: none;
+  border: none;
+  color: var(--token-color-text-muted);
+  font-size: var(--token-font-size-lg);
+  cursor: pointer;
+  padding: var(--token-space-xs);
+  line-height: 1;
+  transition: color var(--token-transition-fast);
+}
+
+.deleteButton:hover {
+  color: var(--token-color-coral);
+}

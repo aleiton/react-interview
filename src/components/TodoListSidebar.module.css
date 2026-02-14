@@ -1,0 +1,110 @@
+.sidebar {
+  width: 280px;
+  min-width: 280px;
+  background: var(--token-color-dark);
+  color: var(--token-color-bg);
+  padding: var(--token-space-lg);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.title {
+  font-size: var(--token-font-size-xl);
+  margin: 0 0 var(--token-space-lg);
+  font-weight: 700;
+}
+
+.createForm {
+  display: flex;
+  gap: var(--token-space-sm);
+  margin-bottom: var(--token-space-lg);
+}
+
+.input {
+  flex: 1;
+  padding: var(--token-space-sm) var(--token-space-md);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--token-radius-sm);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--token-color-bg);
+  font-size: var(--token-font-size-sm);
+}
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.createButton {
+  padding: var(--token-space-sm) var(--token-space-md);
+  background: var(--token-color-primary);
+  color: var(--token-color-bg);
+  border: none;
+  border-radius: var(--token-radius-sm);
+  cursor: pointer;
+  font-size: var(--token-font-size-sm);
+  transition: opacity var(--token-transition-fast);
+}
+
+.createButton:hover {
+  opacity: 0.85;
+}
+
+.loading {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: var(--token-font-size-sm);
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--token-space-xs);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--token-space-sm) var(--token-space-md);
+  border-radius: var(--token-radius-sm);
+  cursor: pointer;
+  transition: background var(--token-transition-fast);
+}
+
+.item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.active {
+  background: var(--token-color-primary);
+}
+
+.active:hover {
+  background: var(--token-color-primary);
+}
+
+.name {
+  font-size: var(--token-font-size-md);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.deleteButton {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: var(--token-font-size-lg);
+  cursor: pointer;
+  padding: var(--token-space-xs);
+  line-height: 1;
+  transition: color var(--token-transition-fast);
+}
+
+.deleteButton:hover {
+  color: var(--token-color-coral);
+}

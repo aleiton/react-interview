@@ -1,0 +1,25 @@
+.container {
+  position: relative;
+  background: var(--token-color-bg-alt);
+  border-radius: var(--token-radius-sm);
+  height: 24px;
+  overflow: hidden;
+  margin: var(--token-space-sm) 0;
+}
+
+.bar {
+  height: 100%;
+  background: var(--token-color-green);
+  border-radius: var(--token-radius-sm);
+  transition: width var(--token-transition-normal);
+}
+
+.label {
+  position: absolute;
+  top: 50%;
+  left: var(--token-space-sm);
+  transform: translateY(-50%);
+  font-size: var(--token-font-size-sm);
+  font-weight: 600;
+  color: var(--token-color-text);
+}

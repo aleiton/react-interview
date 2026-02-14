@@ -1,0 +1,38 @@
+:root {
+  /* Colors */
+  --token-color-primary: #5B63B7;
+  --token-color-green: #2DB67D;
+  --token-color-green-light: #6DD5A0;
+  --token-color-coral: #E8918A;
+  --token-color-dark: #1E1E2E;
+  --token-color-text: #1A1A1A;
+  --token-color-text-muted: #6B7280;
+  --token-color-bg: #FFFFFF;
+  --token-color-bg-alt: #F5F5F5;
+  --token-color-border: #E5E7EB;
+  --token-color-error-bg: #FEF2F2;
+  --token-color-success-bg: #F0FDF4;
+
+  /* Spacing */
+  --token-space-xs: 4px;
+  --token-space-sm: 8px;
+  --token-space-md: 16px;
+  --token-space-lg: 24px;
+  --token-space-xl: 32px;
+
+  /* Border Radius */
+  --token-radius-sm: 4px;
+  --token-radius-md: 8px;
+  --token-radius-lg: 12px;
+
+  /* Typography */
+  --token-font-family: system-ui, -apple-system, sans-serif;
+  --token-font-size-sm: 0.875rem;
+  --token-font-size-md: 1rem;
+  --token-font-size-lg: 1.25rem;
+  --token-font-size-xl: 1.5rem;
+
+  /* Transitions */
+  --token-transition-fast: 150ms ease;
+  --token-transition-normal: 300ms ease;
+}

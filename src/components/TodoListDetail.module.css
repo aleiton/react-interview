@@ -1,0 +1,106 @@
+.container {
+  flex: 1;
+  padding: var(--token-space-lg) var(--token-space-xl);
+  overflow-y: auto;
+  background: var(--token-color-bg);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--token-space-lg);
+}
+
+.title {
+  font-size: var(--token-font-size-xl);
+  color: var(--token-color-text);
+  margin: 0;
+}
+
+.completeAllButton {
+  padding: var(--token-space-sm) var(--token-space-lg);
+  background: var(--token-color-green);
+  color: var(--token-color-bg);
+  border: none;
+  border-radius: var(--token-radius-sm);
+  cursor: pointer;
+  font-size: var(--token-font-size-sm);
+  font-weight: 600;
+  transition: background var(--token-transition-fast);
+}
+
+.completeAllButton:hover {
+  background: var(--token-color-green-light);
+}
+
+.successBanner {
+  padding: var(--token-space-md);
+  background: var(--token-color-success-bg);
+  border: 1px solid var(--token-color-green);
+  border-radius: var(--token-radius-md);
+  color: var(--token-color-green);
+  font-size: var(--token-font-size-sm);
+  font-weight: 500;
+  margin: var(--token-space-sm) 0;
+}
+
+.addForm {
+  display: flex;
+  gap: var(--token-space-sm);
+  margin-bottom: var(--token-space-lg);
+}
+
+.input {
+  flex: 1;
+  padding: var(--token-space-sm) var(--token-space-md);
+  border: 1px solid var(--token-color-border);
+  border-radius: var(--token-radius-sm);
+  font-size: var(--token-font-size-md);
+  color: var(--token-color-text);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--token-color-primary);
+}
+
+.addButton {
+  padding: var(--token-space-sm) var(--token-space-lg);
+  background: var(--token-color-primary);
+  color: var(--token-color-bg);
+  border: none;
+  border-radius: var(--token-radius-sm);
+  cursor: pointer;
+  font-size: var(--token-font-size-sm);
+  transition: opacity var(--token-transition-fast);
+}
+
+.addButton:hover {
+  opacity: 0.85;
+}
+
+.loading {
+  color: var(--token-color-text-muted);
+  font-size: var(--token-font-size-sm);
+}
+
+.itemList {
+  border: 1px solid var(--token-color-border);
+  border-radius: var(--token-radius-md);
+  overflow: hidden;
+}
+
+.emptyState {
+  color: var(--token-color-text-muted);
+  font-size: var(--token-font-size-lg);
+  text-align: center;
+  margin-top: 40vh;
+}
+
+.emptyItems {
+  color: var(--token-color-text-muted);
+  font-size: var(--token-font-size-sm);
+  text-align: center;
+  padding: var(--token-space-xl);
+}
