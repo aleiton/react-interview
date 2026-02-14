@@ -5,6 +5,7 @@ import {
   useUpdateTodoListMutation,
   useDeleteTodoListMutation,
 } from '../api/todoApi';
+import { Skeleton } from './Skeleton';
 import styles from './TodoListSidebar.module.css';
 
 interface TodoListSidebarProps {
@@ -88,7 +89,7 @@ export function TodoListSidebar({ selectedId, onSelect }: TodoListSidebarProps) 
         </button>
       </div>
 
-      {isLoading && <p className={styles.loading}>Loading...</p>}
+      {isLoading && <Skeleton lines={4} dark />}
 
       <ul className={styles.list}>
         {lists.map((list) => (

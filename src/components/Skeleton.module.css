@@ -1,0 +1,40 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--token-space-sm);
+}
+
+.line {
+  height: 14px;
+  border-radius: var(--token-radius-sm);
+  animation: shimmer 1.5s infinite;
+}
+
+.light {
+  background: linear-gradient(
+    90deg,
+    var(--token-color-border) 25%,
+    var(--token-color-bg-alt) 50%,
+    var(--token-color-border) 75%
+  );
+  background-size: 200% 100%;
+}
+
+.dark {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.08) 25%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.08) 75%
+  );
+  background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

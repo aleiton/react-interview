@@ -10,6 +10,7 @@ import { useTodoListChannel } from '../cable/useTodoListChannel';
 import { TodoItem } from './TodoItem';
 import { ProgressBar } from './ProgressBar';
 import { ErrorBanner } from './ErrorBanner';
+import { Skeleton } from './Skeleton';
 import styles from './TodoListDetail.module.css';
 
 interface TodoListDetailProps {
@@ -93,7 +94,7 @@ export function TodoListDetail({ listId }: TodoListDetailProps) {
         </button>
       </div>
 
-      {isLoading && <p className={styles.loading}>Loading items...</p>}
+      {isLoading && <Skeleton lines={5} />}
 
       <div className={styles.itemList}>
         {items.map((item) => (
