@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
 import styles from './TodoItem.module.css';
+import { useInlineEdit } from '../hooks/useInlineEdit';
 import type { TodoItem as TodoItemType } from '../types/api';
 
 interface TodoItemProps {
@@ -10,46 +10,10 @@ interface TodoItemProps {
 }
 
 export function TodoItem({ item, onToggle, onDelete, onEdit }: TodoItemProps) {
-  const [editing, setEditing] = useState(false);
-  const [editValue, setEditValue] = useState('');
-  const editInputRef = useRef<HTMLInputElement>(null);
-  const savingRef = useRef(false);
-
-  useEffect(() => {
-    if (editing) {
-      editInputRef.current?.focus();
-      editInputRef.current?.select();
-    }
-  }, [editing]);
-
-  const startEditing = () => {
-    if (item.completed) return;
-    savingRef.current = false;
-    setEditing(true);
-    setEditValue(item.description);
-  };
-
-  const cancelEditing = () => {
-    savingRef.current = true;
-    setEditing(false);
-    setEditValue('');
-  };
-
-  const saveEditing = () => {
-    if (savingRef.current) return;
-    savingRef.current = true;
-    const trimmed = editValue.trim();
-    if (trimmed && trimmed !== item.description) {
-      onEdit(trimmed);
-    }
-    setEditing(false);
-    setEditValue('');
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') saveEditing();
-    if (e.key === 'Escape') cancelEditing();
-  };
+  const {
+    editing, editValue, setEditValue, inputRef,
+    startEditing, saveEditing, handleKeyDown,
+  } = useInlineEdit({ onSave: onEdit, disabled: item.completed });
 
   return (
     <div className={styles.container}>
@@ -62,7 +26,7 @@ export function TodoItem({ item, onToggle, onDelete, onEdit }: TodoItemProps) {
         />
         {editing ? (
           <input
-            ref={editInputRef}
+            ref={inputRef}
             className={styles.editInput}
             type="text"
             value={editValue}
@@ -74,7 +38,7 @@ export function TodoItem({ item, onToggle, onDelete, onEdit }: TodoItemProps) {
         ) : (
           <span
             className={item.completed ? styles.completed : styles.description}
-            onDoubleClick={startEditing}
+            onDoubleClick={() => startEditing(item.description)}
           >
             {item.description}
           </span>

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import {
   useGetTodoListsQuery,
   useCreateTodoListMutation,
@@ -7,6 +7,7 @@ import {
 } from '../api/todoApi';
 import { Skeleton } from './Skeleton';
 import { useDelayedLoading } from '../hooks/useDelayedLoading';
+import { useInlineEdit } from '../hooks/useInlineEdit';
 import styles from './TodoListSidebar.module.css';
 
 interface TodoListSidebarProps {
@@ -22,16 +23,15 @@ export function TodoListSidebar({ selectedId, onSelect }: TodoListSidebarProps) 
   const [deleteList] = useDeleteTodoListMutation();
   const [newName, setNewName] = useState('');
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [editValue, setEditValue] = useState('');
-  const editInputRef = useRef<HTMLInputElement>(null);
-  const savingRef = useRef(false);
 
-  useEffect(() => {
-    if (editingId !== null) {
-      editInputRef.current?.focus();
-      editInputRef.current?.select();
-    }
-  }, [editingId]);
+  const edit = useInlineEdit({
+    onSave: (value) => {
+      if (editingId !== null) {
+        updateList({ id: editingId, name: value });
+      }
+      setEditingId(null);
+    },
+  });
 
   const handleCreate = async () => {
     const trimmed = newName.trim();
@@ -46,41 +46,13 @@ export function TodoListSidebar({ selectedId, onSelect }: TodoListSidebarProps) 
     if (selectedId === id) onSelect(null);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleCreateKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') handleCreate();
   };
 
   const startEditing = (id: number, name: string) => {
-    savingRef.current = false;
     setEditingId(id);
-    setEditValue(name);
-  };
-
-  const stopEditing = () => {
-    setEditingId(null);
-    setEditValue('');
-  };
-
-  const cancelEditing = () => {
-    savingRef.current = true;
-    stopEditing();
-  };
-
-  const saveEditing = async () => {
-    if (savingRef.current) return;
-    savingRef.current = true;
-    const trimmed = editValue.trim();
-    if (!trimmed || editingId === null) {
-      stopEditing();
-      return;
-    }
-    await updateList({ id: editingId, name: trimmed });
-    stopEditing();
-  };
-
-  const handleEditKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') saveEditing();
-    if (e.key === 'Escape') cancelEditing();
+    edit.startEditing(name);
   };
 
   return (
@@ -94,7 +66,7 @@ export function TodoListSidebar({ selectedId, onSelect }: TodoListSidebarProps) 
           placeholder="New list name..."
           value={newName}
           onChange={(e) => setNewName(e.target.value)}
-          onKeyDown={handleKeyDown}
+          onKeyDown={handleCreateKeyDown}
         />
         <button className={styles.createButton} onClick={handleCreate}>
           Add
@@ -110,15 +82,15 @@ export function TodoListSidebar({ selectedId, onSelect }: TodoListSidebarProps) 
             className={`${styles.item} ${selectedId === list.id ? styles.active : ''}`}
             onClick={() => onSelect(list.id)}
           >
-            {editingId === list.id ? (
+            {editingId === list.id && edit.editing ? (
               <input
-                ref={editInputRef}
+                ref={edit.inputRef}
                 className={styles.editInput}
                 type="text"
-                value={editValue}
-                onChange={(e) => setEditValue(e.target.value)}
-                onKeyDown={handleEditKeyDown}
-                onBlur={saveEditing}
+                value={edit.editValue}
+                onChange={(e) => edit.setEditValue(e.target.value)}
+                onKeyDown={edit.handleKeyDown}
+                onBlur={() => { edit.saveEditing(); setEditingId(null); }}
                 onClick={(e) => e.stopPropagation()}
                 aria-label="Edit list name"
               />
