@@ -11,6 +11,7 @@ import { TodoItem } from './TodoItem';
 import { ProgressBar } from './ProgressBar';
 import { ErrorBanner } from './ErrorBanner';
 import { Skeleton } from './Skeleton';
+import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import styles from './TodoListDetail.module.css';
 
 interface TodoListDetailProps {
@@ -19,6 +20,7 @@ interface TodoListDetailProps {
 
 export function TodoListDetail({ listId }: TodoListDetailProps) {
   const { data: items = [], isLoading } = useGetTodoItemsQuery(listId!, { skip: listId === null });
+  const showSkeleton = useDelayedLoading(isLoading);
   const [createItem] = useCreateTodoItemMutation();
   const [updateItem] = useUpdateTodoItemMutation();
   const [deleteItem] = useDeleteTodoItemMutation();
@@ -100,7 +102,7 @@ export function TodoListDetail({ listId }: TodoListDetailProps) {
         </button>
       </div>
 
-      {isLoading && <Skeleton lines={5} />}
+      {showSkeleton && <Skeleton lines={5} />}
 
       <div className={styles.itemList}>
         {items.map((item) => (

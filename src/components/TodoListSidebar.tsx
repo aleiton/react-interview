@@ -6,6 +6,7 @@ import {
   useDeleteTodoListMutation,
 } from '../api/todoApi';
 import { Skeleton } from './Skeleton';
+import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import styles from './TodoListSidebar.module.css';
 
 interface TodoListSidebarProps {
@@ -15,6 +16,7 @@ interface TodoListSidebarProps {
 
 export function TodoListSidebar({ selectedId, onSelect }: TodoListSidebarProps) {
   const { data: lists = [], isLoading } = useGetTodoListsQuery();
+  const showSkeleton = useDelayedLoading(isLoading);
   const [createList] = useCreateTodoListMutation();
   const [updateList] = useUpdateTodoListMutation();
   const [deleteList] = useDeleteTodoListMutation();
@@ -89,7 +91,7 @@ export function TodoListSidebar({ selectedId, onSelect }: TodoListSidebarProps) 
         </button>
       </div>
 
-      {isLoading && <Skeleton lines={4} dark />}
+      {showSkeleton && <Skeleton lines={4} dark />}
 
       <ul className={styles.list}>
         {lists.map((list) => (
