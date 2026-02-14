@@ -1,13 +1,29 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { TodoListSidebar } from './components/TodoListSidebar';
 import { TodoListDetail } from './components/TodoListDetail';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import './styles/design-tokens.css';
 import styles from './App.module.css';
 
+function getInitialListId(): number | null {
+  const param = new URLSearchParams(window.location.search).get('list');
+  const parsed = param ? Number(param) : NaN;
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
 function App() {
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedId, setSelectedId] = useState<number | null>(getInitialListId);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (selectedId !== null) {
+      url.searchParams.set('list', String(selectedId));
+    } else {
+      url.searchParams.delete('list');
+    }
+    history.replaceState(null, '', url);
+  }, [selectedId]);
 
   const handleSelect = useCallback((id: number | null) => {
     setSelectedId(id);
