@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import consumer from './consumer';
 import { todoApi } from '../api/todoApi';
@@ -11,9 +11,11 @@ export type BulkCompleteStatus =
   | { state: 'done'; completed: number; total: number }
   | { state: 'error' };
 
-export function useTodoListChannel(listId: number | null) {
+export function useTodoListChannel(listId: number | null, onInvalidate?: () => void) {
   const [status, setStatus] = useState<BulkCompleteStatus>({ state: 'idle' });
   const dispatch = useDispatch();
+  const onInvalidateRef = useRef(onInvalidate);
+  onInvalidateRef.current = onInvalidate;
 
   useEffect(() => {
     if (listId === null) return;
@@ -41,6 +43,7 @@ export function useTodoListChannel(listId: number | null) {
               dispatch(
                 todoApi.util.invalidateTags([{ type: 'TodoItem', id: `LIST-${listId}` }])
               );
+              onInvalidateRef.current?.();
               break;
             case 'error':
               setStatus({ state: 'error' });

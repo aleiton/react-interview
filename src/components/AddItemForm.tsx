@@ -4,9 +4,10 @@ import styles from './TodoListDetail.module.css';
 
 interface AddItemFormProps {
   listId: number;
+  onItemCreated?: () => void;
 }
 
-export function AddItemForm({ listId }: AddItemFormProps) {
+export function AddItemForm({ listId, onItemCreated }: AddItemFormProps) {
   const [createItem] = useCreateTodoItemMutation();
   const [description, setDescription] = useState('');
 
@@ -18,7 +19,10 @@ export function AddItemForm({ listId }: AddItemFormProps) {
     const trimmed = description.trim();
     if (!trimmed) return;
     const result = await createItem({ listId, description: trimmed });
-    if (!('error' in result)) setDescription('');
+    if (!('error' in result)) {
+      setDescription('');
+      onItemCreated?.();
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {

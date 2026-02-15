@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import {
   useGetTodoItemsQuery,
@@ -15,25 +15,58 @@ import { useDelayedLoading } from '../hooks/useDelayedLoading';
 import styles from './TodoListDetail.module.css';
 
 const ESTIMATED_ITEM_HEIGHT = 41;
+const SCROLL_THRESHOLD = 5;
 
 interface TodoListDetailProps {
   listId: number | null;
 }
 
 export function TodoListDetail({ listId }: TodoListDetailProps) {
-  const { data: items = [], isLoading } = useGetTodoItemsQuery(listId ?? 0, { skip: listId === null });
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    setPage(1);
+  }, [listId]);
+
+  const resetPage = useCallback(() => setPage(1), []);
+
+  const { data, isLoading, isFetching } = useGetTodoItemsQuery(
+    { listId: listId ?? 0, page },
+    { skip: listId === null },
+  );
+
+  const items = data?.items ?? [];
+  const hasNextPage = data?.meta ? data.meta.page < data.meta.totalPages : false;
+
   const showSkeleton = useDelayedLoading(isLoading);
   const [updateItem] = useUpdateTodoItemMutation();
   const [deleteItem] = useDeleteTodoItemMutation();
   const [completeAll] = useCompleteAllItemsMutation();
-  const { status, resetStatus } = useTodoListChannel(listId);
+  const { status, resetStatus } = useTodoListChannel(listId, resetPage);
   const scrollRef = useRef<HTMLDivElement>(null);
+
   const virtualizer = useVirtualizer({
     count: items.length,
     getScrollElement: () => scrollRef.current,
     estimateSize: () => ESTIMATED_ITEM_HEIGHT,
     overscan: 10,
   });
+
+  const virtualItems = virtualizer.getVirtualItems();
+
+  useEffect(() => {
+    if (virtualItems.length === 0) return;
+
+    const lastItem = virtualItems[virtualItems.length - 1];
+    if (
+      lastItem &&
+      lastItem.index >= items.length - SCROLL_THRESHOLD &&
+      hasNextPage &&
+      !isFetching
+    ) {
+      setPage((prev) => prev + 1);
+    }
+  }, [virtualItems, items.length, hasNextPage, isFetching]);
 
   if (listId === null) {
     return (
@@ -53,7 +86,10 @@ export function TodoListDetail({ listId }: TodoListDetailProps) {
   return (
     <main className={styles.container}>
       <div className={styles.header}>
-        <h2 className={styles.title}>Items</h2>
+        <h2 className={styles.title}>
+          Items
+          {data?.meta && <span className={styles.itemCount}> ({data.meta.totalCount})</span>}
+        </h2>
         {incompleteCount > 0 && status.state !== 'running' && (
           <button className={styles.completeAllButton} onClick={handleCompleteAll}>
             Mark All Complete ({incompleteCount})
@@ -63,7 +99,7 @@ export function TodoListDetail({ listId }: TodoListDetailProps) {
 
       <BulkCompleteStatus status={status} onReset={resetStatus} onRetry={handleCompleteAll} />
 
-      <AddItemForm listId={listId} />
+      <AddItemForm listId={listId} onItemCreated={resetPage} />
 
       {showSkeleton && <Skeleton lines={5} />}
 
@@ -103,6 +139,9 @@ export function TodoListDetail({ listId }: TodoListDetailProps) {
               );
             })}
           </div>
+          {isFetching && page > 1 && (
+            <div className={styles.loadingMore}>Loading more...</div>
+          )}
         </div>
       )}
     </main>

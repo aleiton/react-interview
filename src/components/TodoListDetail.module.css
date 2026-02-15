@@ -99,3 +99,16 @@
   text-align: center;
   padding: var(--token-space-xl);
 }
+
+.itemCount {
+  font-size: var(--token-font-size-sm);
+  color: var(--token-color-text-muted);
+  font-weight: 400;
+}
+
+.loadingMore {
+  text-align: center;
+  padding: var(--token-space-sm);
+  color: var(--token-color-text-muted);
+  font-size: var(--token-font-size-sm);
+}
