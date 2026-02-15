@@ -33,6 +33,18 @@ export function useTodoListChannel(listId: number | null, onInvalidate?: () => v
                 completed: data.completed,
                 total: data.total,
               });
+              if (data.completed_ids?.length > 0) {
+                const completedSet = new Set(data.completed_ids);
+                dispatch(
+                  todoApi.util.updateQueryData('getTodoItems', { listId, page: 1 }, (draft) => {
+                    for (const item of draft.items) {
+                      if (completedSet.has(item.id)) {
+                        item.completed = true;
+                      }
+                    }
+                  }),
+                );
+              }
               break;
             case 'completed':
               setStatus({

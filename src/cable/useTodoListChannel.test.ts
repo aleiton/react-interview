@@ -26,6 +26,7 @@ vi.mock('../api/todoApi', () => ({
   todoApi: {
     util: {
       invalidateTags: (tags: unknown) => ({ type: 'invalidateTags', payload: tags }),
+      updateQueryData: () => ({ type: 'updateQueryData' }),
     },
   },
 }));
@@ -59,7 +60,7 @@ describe('useTodoListChannel', () => {
     const { result } = renderHook(() => useTodoListChannel(1));
 
     act(() => {
-      receivedCallback!({ action: 'progress', completed: 5, total: 10 });
+      receivedCallback!({ action: 'progress', completed: 5, total: 10, completed_ids: [1, 2, 3, 4, 5] });
     });
 
     expect(result.current.status).toEqual({
