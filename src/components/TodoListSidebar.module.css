@@ -121,3 +121,13 @@
 .deleteButton:hover {
   color: var(--token-color-coral);
 }
+
+.inputError {
+  border-color: var(--token-color-coral);
+}
+
+.fieldError {
+  color: var(--token-color-coral);
+  font-size: var(--token-font-size-sm);
+  margin: var(--token-space-xs) 0 0;
+}

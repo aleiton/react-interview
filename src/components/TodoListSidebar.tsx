@@ -22,6 +22,7 @@ export function TodoListSidebar({ selectedId, onSelect }: TodoListSidebarProps) 
   const [updateList] = useUpdateTodoListMutation();
   const [deleteList] = useDeleteTodoListMutation();
   const [newName, setNewName] = useState('');
+  const [createError, setCreateError] = useState('');
   const [editingId, setEditingId] = useState<number | null>(null);
 
   const edit = useInlineEdit({
@@ -35,9 +36,17 @@ export function TodoListSidebar({ selectedId, onSelect }: TodoListSidebarProps) 
 
   const handleCreate = async () => {
     const trimmed = newName.trim();
-    if (!trimmed) return;
+    if (!trimmed) {
+      setCreateError('Name is required');
+      return;
+    }
+    setCreateError('');
     const result = await createList(trimmed);
-    if (!('error' in result)) setNewName('');
+    if ('error' in result) {
+      setCreateError('Failed to create list. Please try again.');
+    } else {
+      setNewName('');
+    }
   };
 
   const handleDelete = async (id: number) => {
@@ -59,18 +68,21 @@ export function TodoListSidebar({ selectedId, onSelect }: TodoListSidebarProps) 
     <aside className={styles.sidebar}>
       <h2 className={styles.title}>Todo Lists</h2>
 
-      <div className={styles.createForm}>
-        <input
-          className={styles.input}
-          type="text"
-          placeholder="New list name..."
-          value={newName}
-          onChange={(e) => setNewName(e.target.value)}
-          onKeyDown={handleCreateKeyDown}
-        />
-        <button className={styles.createButton} onClick={handleCreate}>
-          Add
-        </button>
+      <div>
+        <div className={styles.createForm}>
+          <input
+            className={`${styles.input} ${createError ? styles.inputError : ''}`}
+            type="text"
+            placeholder="New list name..."
+            value={newName}
+            onChange={(e) => { setNewName(e.target.value); setCreateError(''); }}
+            onKeyDown={handleCreateKeyDown}
+          />
+          <button className={styles.createButton} onClick={handleCreate}>
+            Add
+          </button>
+        </div>
+        {createError && <p className={styles.fieldError}>{createError}</p>}
       </div>
 
       {showSkeleton && <Skeleton lines={4} dark />}
