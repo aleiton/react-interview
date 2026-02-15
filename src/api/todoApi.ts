@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { TodoList, TodoItem } from '../types/api';
+import type { TodoList, TodoItem, PaginatedTodoItems } from '../types/api';
 import { camelizeKeys } from '../utils/camelize';
 
 export const todoApi = createApi({
@@ -26,13 +26,25 @@ export const todoApi = createApi({
           : [{ type: 'TodoList', id: 'LIST' }],
     }),
 
-    getTodoItems: builder.query<TodoItem[], number>({
-      query: (listId) => `/todolists/${listId}/todoitems.json`,
-      transformResponse: (response: unknown) => camelizeKeys<TodoItem[]>(response),
-      providesTags: (result, _error, listId) =>
+    getTodoItems: builder.query<PaginatedTodoItems, { listId: number; page: number }>({
+      query: ({ listId, page }) =>
+        `/todolists/${listId}/todoitems.json?page=${page}&per_page=50`,
+      transformResponse: (response: unknown) =>
+        camelizeKeys<PaginatedTodoItems>(response),
+      serializeQueryArgs: ({ queryArgs }) => queryArgs.listId,
+      merge: (currentCache, newItems) => {
+        const existingIds = new Set(currentCache.items.map((item) => item.id));
+        const uniqueNewItems = newItems.items.filter(
+          (item) => !existingIds.has(item.id),
+        );
+        currentCache.items.push(...uniqueNewItems);
+        currentCache.meta = newItems.meta;
+      },
+      forceRefetch: ({ currentArg, previousArg }) => currentArg !== previousArg,
+      providesTags: (result, _error, { listId }) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: 'TodoItem' as const, id })),
+              ...result.items.map(({ id }) => ({ type: 'TodoItem' as const, id })),
               { type: 'TodoItem', id: `LIST-${listId}` },
             ]
           : [{ type: 'TodoItem', id: `LIST-${listId}` }],

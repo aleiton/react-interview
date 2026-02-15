@@ -13,3 +13,15 @@ export interface TodoItem {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface PaginationMeta {
+  page: number;
+  perPage: number;
+  totalCount: number;
+  totalPages: number;
+}
+
+export interface PaginatedTodoItems {
+  items: TodoItem[];
+  meta: PaginationMeta;
+}
