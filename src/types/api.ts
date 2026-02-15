@@ -15,11 +15,10 @@ export interface TodoItem {
 }
 
 export interface PaginationMeta {
-  page: number;
-  perPage: number;
   totalCount: number;
-  totalPages: number;
   incompleteCount: number;
+  hasNextPage: boolean;
+  nextCursor: number | null;
 }
 
 export interface PaginatedTodoItems {

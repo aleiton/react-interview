@@ -26,9 +26,12 @@ export const todoApi = createApi({
           : [{ type: 'TodoList', id: 'LIST' }],
     }),
 
-    getTodoItems: builder.query<PaginatedTodoItems, { listId: number; page: number }>({
-      query: ({ listId, page }) =>
-        `/todolists/${listId}/todoitems.json?page=${page}&per_page=50`,
+    getTodoItems: builder.query<PaginatedTodoItems, { listId: number; cursor?: number }>({
+      query: ({ listId, cursor }) => {
+        const params = new URLSearchParams({ per_page: '50' });
+        if (cursor != null) params.set('after_id', String(cursor));
+        return `/todolists/${listId}/todoitems.json?${params}`;
+      },
       transformResponse: (response: unknown) =>
         camelizeKeys<PaginatedTodoItems>(response),
       serializeQueryArgs: ({ queryArgs }) => queryArgs.listId,
@@ -40,7 +43,8 @@ export const todoApi = createApi({
         currentCache.items.push(...uniqueNewItems);
         currentCache.meta = newItems.meta;
       },
-      forceRefetch: ({ currentArg, previousArg }) => currentArg !== previousArg,
+      forceRefetch: ({ currentArg, previousArg }) =>
+        currentArg?.cursor !== previousArg?.cursor || currentArg?.listId !== previousArg?.listId,
       providesTags: (result, _error, { listId }) =>
         result
           ? [

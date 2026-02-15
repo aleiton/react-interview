@@ -36,7 +36,7 @@ export function useTodoListChannel(listId: number | null, onInvalidate?: () => v
               if (data.completed_ids?.length > 0) {
                 const completedSet = new Set(data.completed_ids);
                 dispatch(
-                  todoApi.util.updateQueryData('getTodoItems', { listId, page: 1 }, (draft) => {
+                  todoApi.util.updateQueryData('getTodoItems', { listId }, (draft) => {
                     for (const item of draft.items) {
                       if (completedSet.has(item.id)) {
                         item.completed = true;

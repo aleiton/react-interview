@@ -22,27 +22,27 @@ interface TodoListDetailProps {
 }
 
 export function TodoListDetail({ listId }: TodoListDetailProps) {
-  const [page, setPage] = useState(1);
+  const [cursor, setCursor] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    setPage(1);
+    setCursor(undefined);
   }, [listId]);
 
-  const resetPage = useCallback(() => setPage(1), []);
+  const resetCursor = useCallback(() => setCursor(undefined), []);
 
   const { data, isLoading, isFetching } = useGetTodoItemsQuery(
-    { listId: listId ?? 0, page },
+    { listId: listId ?? 0, cursor },
     { skip: listId === null },
   );
 
   const items = data?.items ?? [];
-  const hasNextPage = data?.meta ? data.meta.page < data.meta.totalPages : false;
+  const hasNextPage = data?.meta?.hasNextPage ?? false;
 
   const showSkeleton = useDelayedLoading(isLoading);
   const [updateItem] = useUpdateTodoItemMutation();
   const [deleteItem] = useDeleteTodoItemMutation();
   const [completeAll] = useCompleteAllItemsMutation();
-  const { status, resetStatus } = useTodoListChannel(listId, resetPage);
+  const { status, resetStatus } = useTodoListChannel(listId, resetCursor);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const virtualizer = useVirtualizer({
@@ -64,9 +64,9 @@ export function TodoListDetail({ listId }: TodoListDetailProps) {
       hasNextPage &&
       !isFetching
     ) {
-      setPage((prev) => prev + 1);
+      setCursor(data?.meta?.nextCursor ?? undefined);
     }
-  }, [virtualItems, items.length, hasNextPage, isFetching]);
+  }, [virtualItems, items.length, hasNextPage, isFetching, data?.meta?.nextCursor]);
 
   if (listId === null) {
     return (
@@ -99,7 +99,7 @@ export function TodoListDetail({ listId }: TodoListDetailProps) {
 
       <BulkCompleteStatus status={status} onReset={resetStatus} onRetry={handleCompleteAll} />
 
-      <AddItemForm listId={listId} onItemCreated={resetPage} />
+      <AddItemForm listId={listId} onItemCreated={resetCursor} />
 
       {showSkeleton && <Skeleton lines={5} />}
 
@@ -139,7 +139,7 @@ export function TodoListDetail({ listId }: TodoListDetailProps) {
               );
             })}
           </div>
-          {isFetching && page > 1 && (
+          {isFetching && cursor != null && (
             <div className={styles.loadingMore}>Loading more...</div>
           )}
         </div>
