@@ -108,6 +108,11 @@
   overflow: hidden;
 }
 
+.scrollableList {
+  overflow-y: auto;
+  max-height: 60vh;
+}
+
 .emptyState {
   color: var(--token-color-text-muted);
   font-size: var(--token-font-size-lg);

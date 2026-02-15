@@ -111,7 +111,7 @@ export function TodoListDetail({ listId, listName }: TodoListDetailProps) {
           <p className={styles.emptyItems}>No items yet. Add one above.</p>
         </div>
       ) : (
-        <div ref={scrollRef} className={styles.itemList} style={{ overflowY: 'auto', maxHeight: '60vh' }}>
+        <div ref={scrollRef} className={`${styles.itemList} ${styles.scrollableList}`}>
           <div style={{ height: virtualizer.getTotalSize(), position: 'relative' }}>
             {virtualizer.getVirtualItems().map((virtualRow) => {
               const item = items[virtualRow.index];

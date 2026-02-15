@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useGetTodoListsQuery } from './api/todoApi';
 import { TodoListSidebar } from './components/TodoListSidebar';
 import { TodoListDetail } from './components/TodoListDetail';
@@ -19,6 +19,15 @@ function App() {
     return <NotFound />;
   }
 
+  useEffect(() => {
+    if (!sidebarOpen) return;
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSidebarOpen(false);
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [sidebarOpen]);
+
   const handleSelect = useCallback((id: number | null) => {
     select(id);
     setSidebarOpen(false);
@@ -38,7 +47,6 @@ function App() {
         <div
           className={styles.overlay}
           onClick={() => setSidebarOpen(false)}
-          onKeyDown={(e) => e.key === 'Escape' && setSidebarOpen(false)}
           role="presentation"
         />
       )}

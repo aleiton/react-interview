@@ -23,6 +23,7 @@ export function TodoItem({ item, onToggle, onDelete, onEdit }: TodoItemProps) {
           checked={item.completed}
           onChange={onToggle}
           className={styles.checkbox}
+          aria-label={`Mark "${item.description}" as ${item.completed ? 'incomplete' : 'complete'}`}
         />
         {editing ? (
           <input
