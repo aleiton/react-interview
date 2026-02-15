@@ -19,9 +19,10 @@ const SCROLL_THRESHOLD = 5;
 
 interface TodoListDetailProps {
   listId: number | null;
+  listName?: string;
 }
 
-export function TodoListDetail({ listId }: TodoListDetailProps) {
+export function TodoListDetail({ listId, listName }: TodoListDetailProps) {
   const [cursor, setCursor] = useState<number | undefined>(undefined);
 
   useEffect(() => {
@@ -87,14 +88,14 @@ export function TodoListDetail({ listId }: TodoListDetailProps) {
     <main className={styles.container}>
       <div className={styles.header}>
         <h2 className={styles.title}>
-          Items
+          {listName ?? 'Items'}
           {data?.meta && <span className={styles.itemCount}> ({data.meta.totalCount})</span>}
+          {incompleteCount > 0 && status.state !== 'running' && (
+            <button className={styles.completeAllButton} onClick={handleCompleteAll}>
+              Complete All ({incompleteCount})
+            </button>
+          )}
         </h2>
-        {incompleteCount > 0 && status.state !== 'running' && (
-          <button className={styles.completeAllButton} onClick={handleCompleteAll}>
-            Mark All Complete ({incompleteCount})
-          </button>
-        )}
       </div>
 
       <BulkCompleteStatus status={status} onReset={resetStatus} onRetry={handleCompleteAll} />

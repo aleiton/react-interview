@@ -29,9 +29,9 @@ function App() {
       <button
         className={styles.hamburger}
         onClick={() => setSidebarOpen((prev) => !prev)}
-        aria-label="Toggle sidebar"
+        aria-label={sidebarOpen ? 'Close sidebar' : 'Open sidebar'}
       >
-        &#9776;
+        {sidebarOpen ? '\u00D7' : '\u2630'}
       </button>
 
       {sidebarOpen && (
@@ -49,7 +49,7 @@ function App() {
         </div>
       </ErrorBoundary>
       <ErrorBoundary>
-        <TodoListDetail listId={selectedId} />
+        <TodoListDetail listId={selectedId} listName={lists.find((l) => l.id === selectedId)?.name} />
       </ErrorBoundary>
     </div>
   );

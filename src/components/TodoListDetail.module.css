@@ -6,12 +6,7 @@
 }
 
 .header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   margin-bottom: var(--token-space-lg);
-  flex-wrap: wrap;
-  gap: var(--token-space-sm);
 }
 
 .title {
@@ -21,7 +16,8 @@
 }
 
 .completeAllButton {
-  padding: var(--token-space-sm) var(--token-space-lg);
+  padding: var(--token-space-xs) var(--token-space-md);
+  margin-left: var(--token-space-md);
   background: var(--token-color-green);
   color: var(--token-color-bg);
   border: none;
@@ -29,6 +25,8 @@
   cursor: pointer;
   font-size: var(--token-font-size-sm);
   font-weight: 600;
+  white-space: nowrap;
+  vertical-align: middle;
   transition: background var(--token-transition-fast);
 }
 
