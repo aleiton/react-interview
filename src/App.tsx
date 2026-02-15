@@ -2,11 +2,16 @@ import { useState, useCallback } from 'react';
 import { TodoListSidebar } from './components/TodoListSidebar';
 import { TodoListDetail } from './components/TodoListDetail';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { NotFound } from './components/NotFound';
 import { useSelectedListId } from './hooks/useSelectedListId';
 import './styles/design-tokens.css';
 import styles from './App.module.css';
 
 function App() {
+  if (window.location.pathname !== '/') {
+    return <NotFound />;
+  }
+
   const { selectedId, select } = useSelectedListId();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 

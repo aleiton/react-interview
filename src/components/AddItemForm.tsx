@@ -43,7 +43,7 @@ export function AddItemForm({ listId, onItemCreated }: AddItemFormProps) {
   };
 
   return (
-    <div>
+    <div className={styles.formGroup}>
       <div className={styles.addForm}>
         <input
           className={`${styles.input} ${error ? styles.inputError : ''}`}

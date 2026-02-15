@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: var(--token-color-bg);
+  color: var(--token-color-text);
+}
+
+.code {
+  font-size: 6rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--token-color-text-muted);
+}
+
+.message {
+  font-size: var(--token-font-size-xl);
+  color: var(--token-color-text-muted);
+  margin: var(--token-space-sm) 0 var(--token-space-lg);
+}
+
+.link {
+  color: var(--token-color-primary);
+  text-decoration: none;
+  font-size: var(--token-font-size-md);
+}
+
+.link:hover {
+  text-decoration: underline;
+}

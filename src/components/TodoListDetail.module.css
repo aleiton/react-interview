@@ -48,7 +48,6 @@
 .addForm {
   display: flex;
   gap: var(--token-space-sm);
-  margin-bottom: var(--token-space-lg);
 }
 
 .input {
@@ -121,4 +120,8 @@
   color: var(--token-color-coral);
   font-size: var(--token-font-size-sm);
   margin: var(--token-space-xs) 0 0;
+}
+
+.formGroup {
+  margin-bottom: var(--token-space-lg);
 }

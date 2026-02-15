@@ -68,7 +68,7 @@ export function TodoListSidebar({ selectedId, onSelect }: TodoListSidebarProps) 
     <aside className={styles.sidebar}>
       <h2 className={styles.title}>Todo Lists</h2>
 
-      <div>
+      <div className={styles.formGroup}>
         <div className={styles.createForm}>
           <input
             className={`${styles.input} ${createError ? styles.inputError : ''}`}
