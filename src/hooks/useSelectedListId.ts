@@ -1,15 +1,9 @@
 import { useState, useCallback, useEffect } from 'react';
+import { slugify } from '../utils/slugify';
 
 interface ListInfo {
   id: number;
   name: string;
-}
-
-function slugify(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
 }
 
 function getSlugFromPath(): string {
@@ -53,5 +47,3 @@ export function useSelectedListId(lists: ListInfo[]) {
 
   return { selectedId, select, resolved } as const;
 }
-
-export { slugify };

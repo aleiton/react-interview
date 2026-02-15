@@ -58,4 +58,8 @@
     z-index: 15;
     background: rgba(0, 0, 0, 0.4);
   }
+
+  .layout > :last-child {
+    padding-top: calc(40px + var(--token-space-lg));
+  }
 }
