@@ -40,7 +40,7 @@
     position: fixed;
     top: var(--token-space-sm);
     left: var(--token-space-sm);
-    z-index: 10;
+    z-index: 25;
     width: 40px;
     height: 40px;
     background: var(--token-color-dark);
@@ -49,6 +49,11 @@
     border-radius: var(--token-radius-sm);
     font-size: var(--token-font-size-xl);
     cursor: pointer;
+    transition: left var(--token-transition-normal);
+  }
+
+  .hamburgerClose {
+    left: calc(280px - 40px - var(--token-space-sm));
   }
 
   .overlay {

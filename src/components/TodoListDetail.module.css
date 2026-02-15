@@ -6,6 +6,10 @@
 }
 
 .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--token-space-sm);
   margin-bottom: var(--token-space-lg);
 }
 
@@ -17,7 +21,6 @@
 
 .completeAllButton {
   padding: var(--token-space-xs) var(--token-space-md);
-  margin-left: var(--token-space-md);
   background: var(--token-color-green);
   color: var(--token-color-bg);
   border: none;
@@ -26,12 +29,32 @@
   font-size: var(--token-font-size-sm);
   font-weight: 600;
   white-space: nowrap;
-  vertical-align: middle;
   transition: background var(--token-transition-fast);
 }
 
 .completeAllButton:hover {
   background: var(--token-color-green-light);
+}
+
+.completeAllWrapper {
+  flex-shrink: 0;
+  min-height: 30px;
+}
+
+@media (max-width: 767px) {
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .completeAllWrapper {
+    min-height: 36px;
+  }
+
+  .completeAllWrapper .completeAllButton {
+    width: 100%;
+    padding: var(--token-space-sm) var(--token-space-md);
+  }
 }
 
 .successBanner {

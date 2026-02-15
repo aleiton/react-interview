@@ -27,7 +27,7 @@ function App() {
   return (
     <div className={styles.layout}>
       <button
-        className={styles.hamburger}
+        className={`${styles.hamburger} ${sidebarOpen ? styles.hamburgerClose : ''}`}
         onClick={() => setSidebarOpen((prev) => !prev)}
         aria-label={sidebarOpen ? 'Close sidebar' : 'Open sidebar'}
       >
