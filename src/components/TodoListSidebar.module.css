@@ -129,8 +129,12 @@
   color: var(--token-color-coral);
   font-size: var(--token-font-size-sm);
   margin: var(--token-space-xs) 0 0;
+  position: absolute;
+  left: 0;
 }
 
 .formGroup {
+  position: relative;
   margin-bottom: var(--token-space-lg);
+  padding-bottom: var(--token-space-md);
 }

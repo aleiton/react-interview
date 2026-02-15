@@ -1,27 +1,57 @@
 import { useState, useCallback, useEffect } from 'react';
 
-function getInitialListId(): number | null {
-  const param = new URLSearchParams(window.location.search).get('list');
-  const parsed = param ? Number(param) : NaN;
-  return Number.isFinite(parsed) ? parsed : null;
+interface ListInfo {
+  id: number;
+  name: string;
 }
 
-export function useSelectedListId() {
-  const [selectedId, setSelectedId] = useState<number | null>(getInitialListId);
+function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
 
+function getSlugFromPath(): string {
+  return window.location.pathname.slice(1); // remove leading /
+}
+
+export function useSelectedListId(lists: ListInfo[]) {
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [resolved, setResolved] = useState(false);
+
+  // Resolve slug from URL once lists are loaded
   useEffect(() => {
-    const url = new URL(window.location.href);
-    if (selectedId !== null) {
-      url.searchParams.set('list', String(selectedId));
-    } else {
-      url.searchParams.delete('list');
+    if (lists.length === 0) return;
+    if (resolved) return;
+
+    const slug = getSlugFromPath();
+    if (slug) {
+      const match = lists.find((l) => slugify(l.name) === slug);
+      if (match) setSelectedId(match.id);
     }
-    history.replaceState(null, '', url);
-  }, [selectedId]);
+    setResolved(true);
+  }, [lists, resolved]);
+
+  // Update URL when selection changes
+  useEffect(() => {
+    if (!resolved) return;
+
+    if (selectedId !== null) {
+      const list = lists.find((l) => l.id === selectedId);
+      if (list) {
+        history.replaceState(null, '', `/${slugify(list.name)}`);
+        return;
+      }
+    }
+    history.replaceState(null, '', '/');
+  }, [selectedId, lists, resolved]);
 
   const select = useCallback((id: number | null) => {
     setSelectedId(id);
   }, []);
 
-  return { selectedId, select } as const;
+  return { selectedId, select, resolved } as const;
 }
+
+export { slugify };

@@ -21,8 +21,6 @@ export function AddItemForm({ listId, onItemCreated }: AddItemFormProps) {
 
   const handleSubmit = async () => {
     const trimmed = description.trim();
-    if (!trimmed) return;
-
     if (trimmed.length < MIN_DESCRIPTION_LENGTH) {
       setError(`Description must be at least ${MIN_DESCRIPTION_LENGTH} characters`);
       return;

@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useGetTodoListsQuery } from './api/todoApi';
 import { TodoListSidebar } from './components/TodoListSidebar';
 import { TodoListDetail } from './components/TodoListDetail';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -8,12 +9,15 @@ import './styles/design-tokens.css';
 import styles from './App.module.css';
 
 function App() {
-  if (window.location.pathname !== '/') {
+  const { data: lists = [], isLoading: listsLoading } = useGetTodoListsQuery();
+  const { selectedId, select, resolved } = useSelectedListId(lists);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Show 404 only after lists loaded and slug resolved
+  const path = window.location.pathname;
+  if (!listsLoading && resolved && path !== '/' && selectedId === null) {
     return <NotFound />;
   }
-
-  const { selectedId, select } = useSelectedListId();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleSelect = useCallback((id: number | null) => {
     select(id);

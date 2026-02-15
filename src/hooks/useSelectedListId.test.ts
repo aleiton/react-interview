@@ -2,48 +2,57 @@ import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useSelectedListId } from './useSelectedListId';
 
+const mockLists = [
+  { id: 1, name: 'Grocery Shopping' },
+  { id: 7, name: 'Work Tasks' },
+  { id: 42, name: 'Weekend Chores' },
+];
+
 describe('useSelectedListId', () => {
   beforeEach(() => {
     history.replaceState(null, '', '/');
   });
 
-  it('returns null when no list param is in the URL', () => {
-    const { result } = renderHook(() => useSelectedListId());
+  it('returns null when at root path with no slug', () => {
+    const { result } = renderHook(() => useSelectedListId(mockLists));
+
     expect(result.current.selectedId).toBeNull();
   });
 
-  it('reads the initial list ID from the URL search params', () => {
-    history.replaceState(null, '', '/?list=42');
-    const { result } = renderHook(() => useSelectedListId());
-    expect(result.current.selectedId).toBe(42);
+  it('resolves list ID from URL slug', () => {
+    history.replaceState(null, '', '/grocery-shopping');
+    const { result } = renderHook(() => useSelectedListId(mockLists));
+
+    expect(result.current.selectedId).toBe(1);
   });
 
-  it('ignores invalid list param values', () => {
-    history.replaceState(null, '', '/?list=abc');
-    const { result } = renderHook(() => useSelectedListId());
+  it('returns null for unrecognized slugs', () => {
+    history.replaceState(null, '', '/nonexistent-list');
+    const { result } = renderHook(() => useSelectedListId(mockLists));
+
     expect(result.current.selectedId).toBeNull();
   });
 
-  it('updates the URL when selecting a list', () => {
-    const { result } = renderHook(() => useSelectedListId());
+  it('updates the URL slug when selecting a list', () => {
+    const { result } = renderHook(() => useSelectedListId(mockLists));
 
     act(() => {
       result.current.select(7);
     });
 
     expect(result.current.selectedId).toBe(7);
-    expect(new URLSearchParams(window.location.search).get('list')).toBe('7');
+    expect(window.location.pathname).toBe('/work-tasks');
   });
 
-  it('removes the list param when deselecting', () => {
-    history.replaceState(null, '', '/?list=5');
-    const { result } = renderHook(() => useSelectedListId());
+  it('resets URL to / when deselecting', () => {
+    history.replaceState(null, '', '/grocery-shopping');
+    const { result } = renderHook(() => useSelectedListId(mockLists));
 
     act(() => {
       result.current.select(null);
     });
 
     expect(result.current.selectedId).toBeNull();
-    expect(new URLSearchParams(window.location.search).has('list')).toBe(false);
+    expect(window.location.pathname).toBe('/');
   });
 });
