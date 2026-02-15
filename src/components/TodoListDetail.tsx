@@ -81,7 +81,7 @@ export function TodoListDetail({ listId }: TodoListDetailProps) {
     await completeAll(listId);
   };
 
-  const incompleteCount = items.filter((i) => !i.completed).length;
+  const incompleteCount = data?.meta?.incompleteCount ?? 0;
 
   return (
     <main className={styles.container}>

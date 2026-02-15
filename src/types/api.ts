@@ -19,6 +19,7 @@ export interface PaginationMeta {
   perPage: number;
   totalCount: number;
   totalPages: number;
+  incompleteCount: number;
 }
 
 export interface PaginatedTodoItems {
