@@ -44,6 +44,14 @@ describe('useSelectedListId', () => {
     expect(window.location.pathname).toBe('/7');
   });
 
+  it('preserves legacy slug URL for 404 detection', () => {
+    history.replaceState(null, '', '/weekend-chores');
+    const { result } = renderHook(() => useSelectedListId(mockLists));
+
+    expect(result.current.selectedId).toBeNull();
+    expect(window.location.pathname).toBe('/weekend-chores');
+  });
+
   it('resets URL to / when deselecting', () => {
     history.replaceState(null, '', '/1');
     const { result } = renderHook(() => useSelectedListId(mockLists));

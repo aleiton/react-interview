@@ -14,6 +14,7 @@ function getIdFromPath(): number | null {
 export function useSelectedListId(lists: ListInfo[]) {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [resolved, setResolved] = useState(false);
+  const [userSelected, setUserSelected] = useState(false);
 
   // Resolve ID from URL once lists are loaded
   useEffect(() => {
@@ -28,9 +29,9 @@ export function useSelectedListId(lists: ListInfo[]) {
     setResolved(true);
   }, [lists, resolved]);
 
-  // Update URL when selection changes
+  // Update URL only in response to user selections (not initial resolution)
   useEffect(() => {
-    if (!resolved) return;
+    if (!resolved || !userSelected) return;
 
     if (selectedId !== null) {
       const list = lists.find((l) => l.id === selectedId);
@@ -40,9 +41,10 @@ export function useSelectedListId(lists: ListInfo[]) {
       }
     }
     history.replaceState(null, '', '/');
-  }, [selectedId, lists, resolved]);
+  }, [selectedId, lists, resolved, userSelected]);
 
   const select = useCallback((id: number | null) => {
+    setUserSelected(true);
     setSelectedId(id);
   }, []);
 

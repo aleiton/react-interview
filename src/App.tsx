@@ -13,7 +13,7 @@ function App() {
   const { selectedId, select, resolved } = useSelectedListId(lists);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Show 404 only after lists loaded and slug resolved
+  // Show 404 only after lists loaded and URL resolved
   const path = window.location.pathname;
   if (!listsLoading && resolved && path !== '/' && selectedId === null) {
     return <NotFound />;
