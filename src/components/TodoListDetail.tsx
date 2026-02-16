@@ -92,15 +92,14 @@ export function TodoListDetail({ listId, listName }: TodoListDetailProps) {
           {data?.meta && <span className={styles.itemCount}> ({data.meta.totalCount})</span>}
         </h2>
         <div className={styles.completeAllWrapper}>
-          {incompleteCount > 0 && status.state !== 'running' && (
+          {incompleteCount > 0 && status.state !== 'running' && status.state !== 'done' && (
             <button className={styles.completeAllButton} onClick={handleCompleteAll}>
               Complete All ({incompleteCount})
             </button>
           )}
+          <BulkCompleteStatus status={status} onReset={resetStatus} onRetry={handleCompleteAll} />
         </div>
       </div>
-
-      <BulkCompleteStatus status={status} onReset={resetStatus} onRetry={handleCompleteAll} />
 
       <AddItemForm listId={listId} onItemCreated={resetCursor} />
 
