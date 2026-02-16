@@ -82,6 +82,8 @@
 }
 
 .name {
+  flex: 1;
+  min-width: 0;
   font-size: var(--token-font-size-md);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -118,6 +120,7 @@
   cursor: pointer;
   padding: var(--token-space-xs);
   line-height: 1;
+  flex-shrink: 0;
   transition: color var(--token-transition-fast);
 }
 

@@ -58,14 +58,11 @@
 }
 
 .successBanner {
-  padding: var(--token-space-md);
-  background: var(--token-color-success-bg);
-  border: 1px solid var(--token-color-green);
-  border-radius: var(--token-radius-md);
+  padding: var(--token-space-xs) var(--token-space-md);
   color: var(--token-color-green);
   font-size: var(--token-font-size-sm);
   font-weight: 500;
-  margin: var(--token-space-sm) 0;
+  white-space: nowrap;
 }
 
 .addForm {

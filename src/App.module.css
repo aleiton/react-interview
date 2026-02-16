@@ -41,19 +41,19 @@
     top: var(--token-space-sm);
     left: var(--token-space-sm);
     z-index: 25;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     background: var(--token-color-dark);
     color: var(--token-color-bg);
     border: none;
     border-radius: var(--token-radius-sm);
-    font-size: var(--token-font-size-xl);
+    font-size: 1.75rem;
     cursor: pointer;
     transition: left var(--token-transition-normal);
   }
 
   .hamburgerClose {
-    left: calc(280px - 40px - var(--token-space-sm));
+    left: calc(100vw - 44px - var(--token-space-sm));
   }
 
   .overlay {
@@ -65,6 +65,6 @@
   }
 
   .layout > :last-child {
-    padding-top: calc(40px + var(--token-space-lg));
+    padding-top: calc(44px + var(--token-space-lg));
   }
 }
