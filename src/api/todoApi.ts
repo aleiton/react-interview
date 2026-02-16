@@ -105,8 +105,19 @@ export const todoApi = createApi({
         body: { todo_item: updates },
       }),
       transformResponse: (response: unknown) => camelizeKeys<TodoItem>(response),
-      invalidatesTags: (result, _error, { listId }) =>
-        result ? [{ type: 'TodoItem', id: result.id }, { type: 'TodoItem', id: `LIST-${listId}` }] : [],
+      async onQueryStarted({ listId, itemId, updates }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          todoApi.util.updateQueryData('getTodoItems', { listId } as any, (draft) => {
+            const item = draft.items.find((i) => i.id === itemId);
+            if (item) Object.assign(item, updates);
+          }),
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
 
     deleteTodoItem: builder.mutation<void, { listId: number; itemId: number }>({
