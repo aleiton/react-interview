@@ -13,12 +13,6 @@ function App() {
   const { selectedId, select, resolved } = useSelectedListId(lists);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Show 404 only after lists loaded and URL resolved
-  const path = window.location.pathname;
-  if (!listsLoading && resolved && path !== '/' && selectedId === null) {
-    return <NotFound />;
-  }
-
   useEffect(() => {
     if (!sidebarOpen) return;
     const handleEscape = (e: KeyboardEvent) => {
@@ -32,6 +26,12 @@ function App() {
     select(id);
     setSidebarOpen(false);
   }, [select]);
+
+  // Show 404 only after lists loaded and URL resolved
+  const path = window.location.pathname;
+  if (!listsLoading && resolved && path !== '/' && selectedId === null) {
+    return <NotFound />;
+  }
 
   return (
     <div className={styles.layout}>
