@@ -36,6 +36,10 @@ export const todoApi = createApi({
         camelizeKeys<PaginatedTodoItems>(response),
       serializeQueryArgs: ({ queryArgs }) => queryArgs.listId,
       merge: (currentCache, newItems) => {
+        const newItemMap = new Map(newItems.items.map((item) => [item.id, item]));
+        currentCache.items = currentCache.items.map((item) =>
+          newItemMap.get(item.id) ?? item,
+        );
         const existingIds = new Set(currentCache.items.map((item) => item.id));
         const uniqueNewItems = newItems.items.filter(
           (item) => !existingIds.has(item.id),
@@ -107,10 +111,20 @@ export const todoApi = createApi({
       transformResponse: (response: unknown) => camelizeKeys<TodoItem>(response),
       async onQueryStarted({ listId, itemId, updates }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          todoApi.util.updateQueryData('getTodoItems', { listId } as any, (draft) => {
-            const item = draft.items.find((i) => i.id === itemId);
-            if (item) Object.assign(item, updates);
-          }),
+          todoApi.util.updateQueryData(
+            'getTodoItems',
+            { listId } as { listId: number; cursor?: number },
+            (draft) => {
+              const item = draft.items.find((i) => i.id === itemId);
+              if (item) {
+                const wasCompleted = item.completed;
+                Object.assign(item, updates);
+                if (updates.completed !== undefined && updates.completed !== wasCompleted) {
+                  draft.meta.incompleteCount += updates.completed ? -1 : 1;
+                }
+              }
+            },
+          ),
         );
         try {
           await queryFulfilled;
