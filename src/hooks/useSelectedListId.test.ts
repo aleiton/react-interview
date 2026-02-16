@@ -13,27 +13,27 @@ describe('useSelectedListId', () => {
     history.replaceState(null, '', '/');
   });
 
-  it('returns null when at root path with no slug', () => {
+  it('returns null when at root path with no ID', () => {
     const { result } = renderHook(() => useSelectedListId(mockLists));
 
     expect(result.current.selectedId).toBeNull();
   });
 
-  it('resolves list ID from URL slug', () => {
-    history.replaceState(null, '', '/grocery-shopping');
+  it('resolves list ID from URL', () => {
+    history.replaceState(null, '', '/1');
     const { result } = renderHook(() => useSelectedListId(mockLists));
 
     expect(result.current.selectedId).toBe(1);
   });
 
-  it('returns null for unrecognized slugs', () => {
-    history.replaceState(null, '', '/nonexistent-list');
+  it('returns null for unrecognized IDs', () => {
+    history.replaceState(null, '', '/999');
     const { result } = renderHook(() => useSelectedListId(mockLists));
 
     expect(result.current.selectedId).toBeNull();
   });
 
-  it('updates the URL slug when selecting a list', () => {
+  it('updates the URL when selecting a list', () => {
     const { result } = renderHook(() => useSelectedListId(mockLists));
 
     act(() => {
@@ -41,11 +41,11 @@ describe('useSelectedListId', () => {
     });
 
     expect(result.current.selectedId).toBe(7);
-    expect(window.location.pathname).toBe('/work-tasks');
+    expect(window.location.pathname).toBe('/7');
   });
 
   it('resets URL to / when deselecting', () => {
-    history.replaceState(null, '', '/grocery-shopping');
+    history.replaceState(null, '', '/1');
     const { result } = renderHook(() => useSelectedListId(mockLists));
 
     act(() => {
